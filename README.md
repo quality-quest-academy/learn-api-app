@@ -7,48 +7,23 @@ A full-stack learning application demonstrating modern web development with Reac
 ### Prerequisites
 - **Node.js** (v14 or higher)
 - **npm** (v6 or higher)
-- Two terminal windows for simultaneous frontend and backend execution
 
-### Port Configuration
-- **Backend API:** `http://localhost:5000`
-- **Frontend App:** `http://localhost:5173`
-
-### Running Both Components Simultaneously
-
-You'll need **two separate terminal windows** to run both the backend and frontend at the same time.
-
-#### Terminal 1 - Backend Server
-
+### Installation
 ```bash
-cd backend
-npm install
-node server.js
+npm run install:all
 ```
 
-The backend API will start on **port 5000**. You should see:
-```
-Server is running on http://localhost:5000
-```
-
-#### Terminal 2 - Frontend Application
-
+### Start Development
 ```bash
-cd frontend
-npm install
 npm run dev
 ```
 
-The frontend will start on **port 5173**. You should see:
-```
-VITE ready in XXX ms
-Local: http://localhost:5173/
-```
+This starts both backend (port 5000) and frontend (port 5173).
 
-### Accessing the Application
-
-Once both servers are running, open your browser and navigate to:
-- **Application UI:** http://localhost:5173
-- **API Health Check:** http://localhost:5000
+### Access
+- **Application:** http://localhost:5173
+- **API:** http://localhost:5000
+- **API Docs:** http://localhost:5000/api-docs
 
 ---
 
@@ -126,40 +101,26 @@ learn-api-app/
 
 ## Polski 🇵🇱
 
-### Wymagania wstępne
+### Wymagania
 - **Node.js** (v14 lub wyższy)
 - **npm** (v6 lub wyższy)
-- Dwa okna terminala do równoczesnego uruchomienia frontendu i backendu
 
-### Konfiguracja portów
-- **Backend API:** `http://localhost:5000`
-- **Frontend:** `http://localhost:5173`
-
-### Uruchomienie obu komponentów jednocześnie
-
-Potrzebujesz **dwóch osobnych okien terminala**.
-
-#### Terminal 1 - Serwer Backend
-
+### Instalacja
 ```bash
-cd backend
-npm install
-node server.js
+npm run install:all
 ```
 
-#### Terminal 2 - Aplikacja Frontend
-
+### Uruchomienie
 ```bash
-cd frontend
-npm install
 npm run dev
 ```
 
-### Dostęp do aplikacji
+Uruchamia backend (port 5000) i frontend (port 5173).
 
-Otwórz przeglądarkę i przejdź do:
-- **Interfejs aplikacji:** http://localhost:5173
+### Dostęp
+- **Aplikacja:** http://localhost:5173
 - **API:** http://localhost:5000
+- **Dokumentacja API:** http://localhost:5000/api-docs
 
 ---
 
