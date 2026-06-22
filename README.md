@@ -21,6 +21,10 @@ npm run dev
 ```
 App runs on `http://localhost:5173`
 
+### API Endpoints
+- `GET /api/users` - Get all users
+- `POST /api/users` - Create user (requires `name` and `role`)
+
 ---
 
 ## Polski
@@ -43,3 +47,7 @@ npm install
 npm run dev
 ```
 Aplikacja działa na `http://localhost:5173`
+
+### Endpointy API
+- `GET /api/users` - Pobierz użytkowników
+- `POST /api/users` - Utwórz użytkownika (wymaga `name` i `role`)
