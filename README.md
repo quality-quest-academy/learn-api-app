@@ -3,6 +3,10 @@
 ## English
 A simple Node.js API application for learning purposes.
 
+### Features
+- **Frontend:** React SPA with routing (Home, Users, Roles pages)
+- **Backend:** RESTful API for users and roles management
+
 ### Getting Started
 
 **Backend:**
@@ -32,6 +36,10 @@ App runs on `http://localhost:5173`
 
 ## Polski
 Prosta aplikacja API Node.js do nauki.
+
+### Funkcje
+- **Frontend:** React SPA z routingiem (strony: Home, Users, Roles)
+- **Backend:** RESTful API do zarządzania użytkownikami i rolami
 
 ### Uruchomienie
 
