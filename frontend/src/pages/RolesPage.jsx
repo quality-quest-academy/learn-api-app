@@ -77,25 +77,30 @@ function RolesPage() {
   };
 
   return (
-    <div className="bg-slate-800 rounded-lg shadow-xl p-8">
-      <h1 className="text-3xl font-bold text-white mb-6">
-        Roles
-      </h1>
+    <div className="space-y-8">
+      <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent p-8">
+        <h1 className="text-4xl font-bold text-primary-brown mb-2 border-b-2 border-primary-accent pb-4">
+          Roles Management
+        </h1>
+      </div>
 
       {/* Role Creation Form */}
-      <div className="mb-8 bg-slate-700 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-white mb-4">Create New Role</h2>
+      <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent p-8">
+        <h2 className="text-2xl font-semibold text-primary-brown mb-6 flex items-center">
+          <span className="bg-primary-brown text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">+</span>
+          Create New Role
+        </h2>
         
         {/* Error Alert */}
         {error && (
-          <div className="bg-red-600 text-white px-4 py-3 rounded mb-4">
-            {error}
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded mb-6 shadow">
+            <p className="font-medium">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-slate-300 mb-2">
+            <label htmlFor="title" className="block text-sm font-semibold text-primary-brown mb-2">
               Title
             </label>
             <input
@@ -103,13 +108,13 @@ function RolesPage() {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-white text-primary-text rounded-lg border-2 border-primary-accent focus:outline-none focus:ring-2 focus:ring-primary-brown focus:border-primary-brown transition-all shadow-sm"
               placeholder="Enter role title"
             />
           </div>
 
           <div>
-            <label htmlFor="department" className="block text-sm font-medium text-slate-300 mb-2">
+            <label htmlFor="department" className="block text-sm font-semibold text-primary-brown mb-2">
               Department
             </label>
             <input
@@ -117,14 +122,14 @@ function RolesPage() {
               id="department"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-              className="w-full px-4 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-white text-primary-text rounded-lg border-2 border-primary-accent focus:outline-none focus:ring-2 focus:ring-primary-brown focus:border-primary-brown transition-all shadow-sm"
               placeholder="Enter department"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
+            className="w-full bg-primary-brown hover:bg-primary-accent text-primary-light font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
             Create Role
           </button>
@@ -132,61 +137,70 @@ function RolesPage() {
       </div>
 
       {/* Roles Table */}
-      <div className="bg-slate-700 rounded-lg overflow-hidden">
-        <h2 className="text-xl font-semibold text-white px-6 py-4 bg-slate-600">
-          Role List
-        </h2>
+      <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent overflow-hidden">
+        <div className="bg-primary-brown px-6 py-4">
+          <h2 className="text-2xl font-semibold text-primary-light">
+            Role List
+          </h2>
+        </div>
         
         {loading ? (
-          <div className="px-6 py-8 text-center text-slate-400">
-            Loading roles...
+          <div className="px-6 py-12 text-center text-primary-text">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-brown border-t-transparent"></div>
+            <p className="mt-4 font-medium">Loading roles...</p>
           </div>
         ) : roles.length === 0 ? (
-          <div className="px-6 py-8 text-center text-slate-400">
-            No roles found
+          <div className="px-6 py-12 text-center text-primary-text">
+            <p className="text-lg font-medium">No roles found</p>
+            <p className="text-sm mt-2 text-gray-500">Create your first role using the form above</p>
           </div>
         ) : (
-          <table className="w-full">
-            <thead className="bg-slate-600">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Department
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-600">
-              {roles.map((role) => (
-                <tr key={role.id} className="hover:bg-slate-600 transition duration-150">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                    {role.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
-                    {role.title}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                    {role.department}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      onClick={() => handleDelete(role.id)}
-                      className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-primary-brown">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-light uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-light uppercase tracking-wider">
+                    Title
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-light uppercase tracking-wider">
+                    Department
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-light uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y-2 divide-primary-accent">
+                {roles.map((role, index) => (
+                  <tr 
+                    key={role.id} 
+                    className={`hover:bg-primary-bg transition-all duration-150 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-brown">
+                      {role.id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-primary-text">
+                      {role.title}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-primary-text">
+                      {role.department}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleDelete(role.id)}
+                        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
