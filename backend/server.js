@@ -1,9 +1,84 @@
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 const app = express();
 const PORT = 5000;
+
+// Swagger configuration
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Learn API App',
+      version: '1.0.0',
+      description: 'A simple Express API for managing users and roles',
+      contact: {
+        name: 'API Support'
+      }
+    },
+    servers: [
+      {
+        url: `http://localhost:${PORT}`,
+        description: 'Development server'
+      }
+    ],
+    components: {
+      schemas: {
+        User: {
+          type: 'object',
+          required: ['name', 'role'],
+          properties: {
+            id: {
+              type: 'integer',
+              description: 'Auto-generated user ID'
+            },
+            name: {
+              type: 'string',
+              description: 'User name'
+            },
+            role: {
+              type: 'string',
+              description: 'User role'
+            }
+          }
+        },
+        Role: {
+          type: 'object',
+          required: ['title', 'department'],
+          properties: {
+            id: {
+              type: 'integer',
+              description: 'Auto-generated role ID'
+            },
+            title: {
+              type: 'string',
+              description: 'Role title'
+            },
+            department: {
+              type: 'string',
+              description: 'Department name'
+            }
+          }
+        },
+        Error: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              description: 'Error message'
+            }
+          }
+        }
+      }
+    }
+  },
+  apis: ['./server.js'] // Path to the API files
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // In-memory data store
 let users = [
@@ -18,6 +93,9 @@ let roles = [
 app.use(express.json());
 app.use(cors());
 
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Rate limiter for all /api routes: max 100 requests per 15 minutes per IP
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -27,17 +105,88 @@ const apiLimiter = rateLimit({
 
 app.use('/api', apiLimiter);
 
-// Basic health check endpoint
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Health check endpoint
+ *     description: Returns a simple message to confirm the API is running
+ *     responses:
+ *       200:
+ *         description: API is running successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: API is running successfully
+ */
 app.get('/', (req, res) => {
   res.json({ message: 'API is running successfully' });
 });
 
-// GET /api/users - Return all users
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     description: Retrieve a list of all users
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
 app.get('/api/users', (req, res) => {
   res.status(200).json(users);
 });
 
-// POST /api/users - Create a new user with validation and memory protection
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Create a new user
+ *     description: Create a new user with name and role (max 20 users, oldest non-default users removed if limit reached)
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - role
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Jane Smith
+ *               role:
+ *                 type: string
+ *                 example: Developer
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 app.post('/api/users', (req, res) => {
   const { name, role } = req.body;
 
@@ -69,12 +218,66 @@ app.post('/api/users', (req, res) => {
   res.status(201).json(newUser);
 });
 
-// GET /api/roles - Return all roles
+/**
+ * @swagger
+ * /api/roles:
+ *   get:
+ *     summary: Get all roles
+ *     description: Retrieve a list of all roles
+ *     tags:
+ *       - Roles
+ *     responses:
+ *       200:
+ *         description: List of roles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Role'
+ */
 app.get('/api/roles', (req, res) => {
   res.status(200).json(roles);
 });
 
-// POST /api/roles - Create a new role with validation and memory protection
+/**
+ * @swagger
+ * /api/roles:
+ *   post:
+ *     summary: Create a new role
+ *     description: Create a new role with title and department (max 20 roles, oldest non-default roles removed if limit reached)
+ *     tags:
+ *       - Roles
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - department
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Senior Developer
+ *               department:
+ *                 type: string
+ *                 example: Engineering
+ *     responses:
+ *       201:
+ *         description: Role created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Role'
+ *       400:
+ *         description: Missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 app.post('/api/roles', (req, res) => {
   const { title, department } = req.body;
 
@@ -106,7 +309,47 @@ app.post('/api/roles', (req, res) => {
   res.status(201).json(newRole);
 });
 
-// DELETE /api/roles/:id - Delete a role by id (except default role)
+/**
+ * @swagger
+ * /api/roles/{id}:
+ *   delete:
+ *     summary: Delete a role
+ *     description: Delete a role by ID (system default role with ID 1 cannot be deleted)
+ *     tags:
+ *       - Roles
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Role ID to delete
+ *     responses:
+ *       200:
+ *         description: Role deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Role deleted successfully
+ *                 role:
+ *                   $ref: '#/components/schemas/Role'
+ *       403:
+ *         description: Cannot delete system default role
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Role not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 app.delete('/api/roles/:id', (req, res) => {
   const id = parseInt(req.params.id);
 

@@ -72,90 +72,19 @@ Once both servers are running, open your browser and navigate to:
 
 ## 🔌 API Documentation
 
-All API responses use `Content-Type: application/json`
+### 📚 Interactive Swagger/OpenAPI Documentation
 
-### Users Endpoints
+The API includes **interactive Swagger documentation** for easy exploration and testing:
 
-#### `GET /api/users`
-Retrieve all users.
+**🌐 Swagger UI:** http://localhost:5000/api-docs
 
-**Response:** `200 OK`
-```json
-[
-  { "id": 1, "name": "John Doe", "role": "QA Engineer" }
-]
-```
+Features:
+- **Try It Out**: Test all endpoints directly from your browser
+- **Request/Response Schemas**: View expected data formats
+- **Parameter Documentation**: See all required and optional parameters
+- **OpenAPI 3.0 Specification**: Industry-standard API documentation
 
-#### `POST /api/users`
-Create a new user.
-
-**Request Body:**
-```json
-{
-  "name": "Jane Smith",
-  "role": "Developer"
-}
-```
-
-**Responses:**
-- `201 Created` - User created successfully
-  ```json
-  { "id": 2, "name": "Jane Smith", "role": "Developer" }
-  ```
-- `400 Bad Request` - Missing required fields
-  ```json
-  { "error": "Missing required fields: name and role are required" }
-  ```
-
-### Roles Endpoints
-
-#### `GET /api/roles`
-Retrieve all roles.
-
-**Response:** `200 OK`
-```json
-[
-  { "id": 1, "title": "QA Engineer", "department": "Testing" }
-]
-```
-
-#### `POST /api/roles`
-Create a new role.
-
-**Request Body:**
-```json
-{
-  "title": "Backend Developer",
-  "department": "Engineering"
-}
-```
-
-**Responses:**
-- `201 Created` - Role created successfully
-  ```json
-  { "id": 2, "title": "Backend Developer", "department": "Engineering" }
-  ```
-- `400 Bad Request` - Missing required fields
-  ```json
-  { "error": "Missing required fields: title and department are required" }
-  ```
-
-#### `DELETE /api/roles/:id`
-Delete a role by ID.
-
-**Responses:**
-- `200 OK` - Role deleted successfully
-  ```json
-  { "message": "Role deleted successfully", "role": {...} }
-  ```
-- `403 Forbidden` - Attempting to delete protected default role (id: 1)
-  ```json
-  { "error": "System default resources cannot be deleted" }
-  ```
-- `404 Not Found` - Role not found
-  ```json
-  { "error": "Role not found" }
-  ```
+For more details, see [backend/SWAGGER.md](backend/SWAGGER.md)
 
 ---
 
@@ -172,23 +101,6 @@ Delete a role by ID.
 - All responses use `application/json` content-type
 - Input validation on all POST endpoints
 - Memory protection with automatic cleanup (max 20 items per resource)
-
----
-
-## 🧪 Testing the API
-
-You can test the API using PowerShell, curl, or any API client:
-
-**PowerShell Example:**
-```powershell
-# Get all users
-Invoke-RestMethod -Uri http://localhost:5000/api/users -Method Get
-
-# Create a new user
-Invoke-RestMethod -Uri http://localhost:5000/api/users -Method Post `
-  -ContentType "application/json" `
-  -Body '{"name":"Bob Wilson","role":"Designer"}' | ConvertTo-Json
-```
 
 ---
 
