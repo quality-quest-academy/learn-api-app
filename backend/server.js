@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 
 // GET /api/users - Return all users
 app.get('/api/users', (req, res) => {
-  res.json(users);
+  res.status(200).json(users);
 });
 
 // POST /api/users - Create a new user with validation and memory protection
@@ -71,7 +71,7 @@ app.post('/api/users', (req, res) => {
 
 // GET /api/roles - Return all roles
 app.get('/api/roles', (req, res) => {
-  res.json(roles);
+  res.status(200).json(roles);
 });
 
 // POST /api/roles - Create a new role with validation and memory protection
@@ -127,7 +127,7 @@ app.delete('/api/roles/:id', (req, res) => {
   // Remove the role
   const deletedRole = roles.splice(roleIndex, 1)[0];
 
-  res.json({ message: 'Role deleted successfully', role: deletedRole });
+  res.status(200).json({ message: 'Role deleted successfully', role: deletedRole });
 });
 
 // Start server
