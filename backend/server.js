@@ -105,10 +105,12 @@ app.use('/api', apiLimiter);
 
 /**
  * @swagger
- * /:
+ * /api/health:
  *   get:
  *     summary: Health check endpoint
  *     description: Returns a simple message to confirm the API is running
+ *     tags:
+ *       - Health
  *     responses:
  *       200:
  *         description: API is running successfully
@@ -121,7 +123,7 @@ app.use('/api', apiLimiter);
  *                   type: string
  *                   example: API is running successfully
  */
-app.get('/', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ message: 'API is running successfully' });
 });
 
@@ -371,7 +373,8 @@ const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist');
 app.use(express.static(frontendDistPath));
 
 // SPA fallback — must be after all API routes and Swagger
-app.get('*', (req, res) => {
+// Regex excludes /api/* and /api-docs to avoid intercepting API/Swagger requests
+app.get(/^\/(?!api\/|api-docs).*/, (req, res) => {
   res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
 
