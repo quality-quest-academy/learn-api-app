@@ -4,7 +4,20 @@ function RolesPage() {
   const [roles, setRoles] = useState([]);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!successMessage) {
+      return undefined;
+    }
+
+    const timer = setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [successMessage]);
 
   // Fetch roles on component mount
   useEffect(() => {
@@ -28,6 +41,7 @@ function RolesPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
 
     try {
       const response = await fetch('http://localhost:5000/api/roles', {
@@ -50,13 +64,14 @@ function RolesPage() {
         setTitle('');
         // Append new role to the list
         setRoles([...roles, newRole]);
+        setSuccessMessage(`Role "${newRole.title}" created successfully.`);
       }
     } catch (err) {
       setError('Failed to create role');
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, roleTitle) => {
     try {
       const response = await fetch(`http://localhost:5000/api/roles/${id}`, {
         method: 'DELETE',
@@ -66,6 +81,7 @@ function RolesPage() {
         // Remove the deleted role from state
         setRoles(roles.filter(role => role.id !== id));
         setError('');
+        setSuccessMessage(`Role "${roleTitle}" deleted successfully.`);
       } else {
         setError('Failed to delete role');
       }
@@ -76,6 +92,16 @@ function RolesPage() {
 
   return (
     <div className="space-y-8">
+      {successMessage && (
+        <div
+          className="fixed top-6 right-6 z-50 max-w-sm rounded-xl border border-green-300 bg-green-50 px-5 py-4 shadow-2xl"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="font-semibold text-green-800">{successMessage}</p>
+        </div>
+      )}
+
       <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent p-8">
         <h1 className="text-4xl font-bold text-primary-brown mb-2 border-b-2 border-primary-accent pb-4">
           Roles Management
@@ -168,7 +194,7 @@ function RolesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <button
-                        onClick={() => handleDelete(role.id)}
+                        onClick={() => handleDelete(role.id, role.title)}
                         className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                       >
                         Delete

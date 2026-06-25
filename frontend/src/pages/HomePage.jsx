@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function HomePage() {
   return (
     <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent p-10">
@@ -13,18 +15,29 @@ function HomePage() {
       </div>
       <div className="mt-8 pt-8 border-t-2 border-primary-bg">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg p-6 border border-primary-accent shadow-md">
+          <Link 
+            to="/users" 
+            className="bg-white rounded-lg p-6 border border-primary-accent shadow-md hover:shadow-lg hover:border-primary-brown transition-all cursor-pointer"
+          >
             <h3 className="text-xl font-semibold text-primary-brown mb-2">Users</h3>
             <p className="text-primary-text text-sm">Manage and view user information</p>
-          </div>
-          <div className="bg-white rounded-lg p-6 border border-primary-accent shadow-md">
+          </Link>
+          <Link 
+            to="/roles" 
+            className="bg-white rounded-lg p-6 border border-primary-accent shadow-md hover:shadow-lg hover:border-primary-brown transition-all cursor-pointer"
+          >
             <h3 className="text-xl font-semibold text-primary-brown mb-2">Roles</h3>
             <p className="text-primary-text text-sm">Configure role assignments</p>
-          </div>
-          <div className="bg-white rounded-lg p-6 border border-primary-accent shadow-md">
+          </Link>
+          <a 
+            href="http://localhost:5000/api-docs" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-white rounded-lg p-6 border border-primary-accent shadow-md hover:shadow-lg hover:border-primary-brown transition-all cursor-pointer block"
+          >
             <h3 className="text-xl font-semibold text-primary-brown mb-2">API</h3>
             <p className="text-primary-text text-sm">RESTful API integration</p>
-          </div>
+          </a>
         </div>
       </div>
     </div>

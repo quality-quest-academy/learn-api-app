@@ -4,31 +4,28 @@ function UsersPage() {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
+  const [roles, setRoles] = useState([]);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [rolesLoading, setRolesLoading] = useState(true);
 
-  // Fetch users on component mount
   useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost:5000/api/users');
-      const data = await response.json();
-      setUsers(data);
-      setError('');
-    } catch (err) {
-      setError('Failed to fetch users');
-    } finally {
-      setLoading(false);
+    if (!successMessage) {
+      return undefined;
     }
-  };
+
+    const timer = setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [successMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
 
     try {
       const response = await fetch('http://localhost:5000/api/users', {
@@ -52,14 +49,54 @@ function UsersPage() {
         setRole('');
         // Append new user to the list
         setUsers([...users, newUser]);
+        setSuccessMessage(`User "${newUser.name}" created successfully.`);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to create user');
     }
   };
 
+  // Fetch users and roles on component mount
+  useEffect(() => {
+    const loadUsersAndRoles = async () => {
+      try {
+        const [usersResponse, rolesResponse] = await Promise.all([
+          fetch('http://localhost:5000/api/users'),
+          fetch('http://localhost:5000/api/roles'),
+        ]);
+
+        const [usersData, rolesData] = await Promise.all([
+          usersResponse.json(),
+          rolesResponse.json(),
+        ]);
+
+        setUsers(usersData);
+        setRoles(rolesData);
+        setRole((currentRole) => currentRole || rolesData[0]?.title || '');
+        setError('');
+      } catch {
+        setError('Failed to fetch users and roles');
+      } finally {
+        setLoading(false);
+        setRolesLoading(false);
+      }
+    };
+
+    loadUsersAndRoles();
+  }, []);
+
   return (
     <div className="space-y-8">
+      {successMessage && (
+        <div
+          className="fixed top-6 right-6 z-50 max-w-sm rounded-xl border border-green-300 bg-green-50 px-5 py-4 shadow-2xl"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="font-semibold text-green-800">{successMessage}</p>
+        </div>
+      )}
+
       <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent p-8">
         <h1 className="text-4xl font-bold text-primary-brown mb-2 border-b-2 border-primary-accent pb-4">
           Users Management
@@ -99,14 +136,23 @@ function UsersPage() {
             <label htmlFor="role" className="block text-sm font-semibold text-primary-brown mb-2">
               Role
             </label>
-            <input
-              type="text"
+            <select
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
+              disabled={rolesLoading || roles.length === 0}
+              required
               className="w-full px-4 py-3 bg-white text-primary-text rounded-lg border-2 border-primary-accent focus:outline-none focus:ring-2 focus:ring-primary-brown focus:border-primary-brown transition-all shadow-sm"
-              placeholder="Enter user role"
-            />
+            >
+              <option value="" disabled>
+                {rolesLoading ? 'Loading roles...' : 'Select a role'}
+              </option>
+              {roles.map((item) => (
+                <option key={item.id} value={item.title}>
+                  {item.title}
+                </option>
+              ))}
+            </select>
           </div>
 
           <button
