@@ -23,8 +23,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: process.env.PUBLIC_URL || `http://localhost:${PORT}`,
-        description: 'Server'
+        url: process.env.PUBLIC_URL || '/',
+        description: 'Current server'
       }
     ],
     components: {
@@ -73,7 +73,7 @@ const swaggerOptions = {
       }
     }
   },
-  apis: ['./server.js'] // Path to the API files
+  apis: [path.join(__dirname, 'server.js')] // Path to the API files
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
