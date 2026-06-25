@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const apiUrl = (path) => `${API_BASE_URL}${path}`;
+
 function RolesPage() {
   const [roles, setRoles] = useState([]);
   const [title, setTitle] = useState('');
@@ -27,7 +30,7 @@ function RolesPage() {
   const fetchRoles = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/roles');
+      const response = await fetch(apiUrl('/api/roles'));
       const data = await response.json();
       setRoles(data);
       setError('');
@@ -44,7 +47,7 @@ function RolesPage() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/roles', {
+      const response = await fetch(apiUrl('/api/roles'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +76,7 @@ function RolesPage() {
 
   const handleDelete = async (id, roleTitle) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/roles/${id}`, {
+      const response = await fetch(apiUrl(`/api/roles/${id}`), {
         method: 'DELETE',
       });
 

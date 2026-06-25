@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const apiUrl = (path) => `${API_BASE_URL}${path}`;
+
 function UsersPage() {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState('');
@@ -28,7 +31,7 @@ function UsersPage() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/users', {
+      const response = await fetch(apiUrl('/api/users'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,8 +64,8 @@ function UsersPage() {
     const loadUsersAndRoles = async () => {
       try {
         const [usersResponse, rolesResponse] = await Promise.all([
-          fetch('http://localhost:5000/api/users'),
-          fetch('http://localhost:5000/api/roles'),
+          fetch(apiUrl('/api/users')),
+          fetch(apiUrl('/api/roles')),
         ]);
 
         const [usersData, rolesData] = await Promise.all([

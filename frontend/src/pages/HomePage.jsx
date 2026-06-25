@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 function HomePage() {
   return (
     <div className="bg-primary-light rounded-xl shadow-2xl border-2 border-primary-accent p-10">
@@ -27,7 +29,7 @@ function HomePage() {
             <p className="text-primary-text text-sm">Configure role assignments</p>
           </Link>
           <a 
-            href="http://localhost:5000/api-docs" 
+            href={`${API_BASE_URL}/api-docs`} 
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-white rounded-lg p-6 border border-primary-accent shadow-md hover:shadow-lg hover:border-primary-brown transition-all cursor-pointer block"
