@@ -3,9 +3,11 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const path = require('path');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+const HOST = '0.0.0.0';
 
 // Swagger configuration
 const swaggerOptions = {
@@ -21,8 +23,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
-        description: 'Development server'
+        url: process.env.PUBLIC_URL || `http://localhost:${PORT}`,
+        description: 'Server'
       }
     ],
     components: {
@@ -364,7 +366,16 @@ app.delete('/api/roles/:id', (req, res) => {
   res.status(200).json({ message: 'Role deleted successfully', role: deletedRole });
 });
 
+// Serve static frontend build
+const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist');
+app.use(express.static(frontendDistPath));
+
+// SPA fallback — must be after all API routes and Swagger
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
+});
+
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
 });

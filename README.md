@@ -20,51 +20,6 @@ npm run dev
 
 This starts both backend (port 5000) and frontend (port 5173).
 
-## ☁️ Deploy To Cloudflare Pages
-
-Cloudflare Pages deploys the frontend as static files.
-
-### 1) Deploy the backend separately
-
-This project uses an Express API from `backend/server.js`. Cloudflare Pages does not run long-lived Node.js servers, so host the backend on another platform (for example Render, Railway, Fly.io, or a VM), or rewrite it for Cloudflare Workers/Functions.
-
-### 2) Configure frontend environment variable
-
-Set this in Cloudflare Pages project settings:
-
-- `VITE_API_BASE_URL` = your backend URL, for example `https://api.your-domain.com`
-
-You can copy `frontend/.env.example` for local/preview environment setup.
-
-### 3) Cloudflare Pages build settings
-
-Option A (recommended): set root directory to `frontend`
-
-- Build command: `npm ci && npm run build`
-- Build output directory: `dist`
-
-Option B: keep root at repository root
-
-- Build command: `npm ci && npm run build`
-- Build output directory: `frontend/dist`
-
-`npm run build` at repo root runs the frontend build script.
-
-### 4) SPA routing support
-
-`frontend/public/_redirects` is included with:
-
-`/* /index.html 200`
-
-This ensures direct navigation to routes like `/users` and `/roles` works on Cloudflare Pages.
-
-### Access
-- **Application:** http://localhost:5173
-- **API:** http://localhost:5000
-- **API Docs:** http://localhost:5000/api-docs
-
----
-
 ## 📋 Features
 
 ### Frontend
