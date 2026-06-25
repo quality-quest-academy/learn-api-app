@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 function RolesPage() {
   const [roles, setRoles] = useState([]);
   const [title, setTitle] = useState('');
-  const [department, setDepartment] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +35,7 @@ function RolesPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, department }),
+        body: JSON.stringify({ title }),
       });
 
       if (response.status === 400) {
@@ -49,7 +48,6 @@ function RolesPage() {
         const newRole = await response.json();
         // Clear form fields
         setTitle('');
-        setDepartment('');
         // Append new role to the list
         setRoles([...roles, newRole]);
       }
@@ -113,20 +111,6 @@ function RolesPage() {
             />
           </div>
 
-          <div>
-            <label htmlFor="department" className="block text-sm font-semibold text-primary-brown mb-2">
-              Department
-            </label>
-            <input
-              type="text"
-              id="department"
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              className="w-full px-4 py-3 bg-white text-primary-text rounded-lg border-2 border-primary-accent focus:outline-none focus:ring-2 focus:ring-primary-brown focus:border-primary-brown transition-all shadow-sm"
-              placeholder="Enter department"
-            />
-          </div>
-
           <button
             type="submit"
             className="w-full bg-primary-brown hover:bg-primary-accent text-primary-light font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
@@ -166,9 +150,6 @@ function RolesPage() {
                     Title
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-bold text-primary-light uppercase tracking-wider">
-                    Department
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-light uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -184,9 +165,6 @@ function RolesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-primary-text">
                       {role.title}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-primary-text">
-                      {role.department}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <button

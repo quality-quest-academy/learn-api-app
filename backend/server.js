@@ -47,7 +47,7 @@ const swaggerOptions = {
         },
         Role: {
           type: 'object',
-          required: ['title', 'department'],
+          required: ['title'],
           properties: {
             id: {
               type: 'integer',
@@ -56,10 +56,6 @@ const swaggerOptions = {
             title: {
               type: 'string',
               description: 'Role title'
-            },
-            department: {
-              type: 'string',
-              description: 'Department name'
             }
           }
         },
@@ -86,7 +82,7 @@ let users = [
 ];
 
 let roles = [
-  { id: 1, title: "QA Engineer", department: "Testing" }
+  { id: 1, title: "QA Engineer" }
 ];
 
 // Middleware
@@ -245,7 +241,7 @@ app.get('/api/roles', (req, res) => {
  * /api/roles:
  *   post:
  *     summary: Create a new role
- *     description: Create a new role with title and department (max 20 roles, oldest non-default roles removed if limit reached)
+ *     description: Create a new role with title (max 20 roles, oldest non-default roles removed if limit reached)
  *     tags:
  *       - Roles
  *     requestBody:
@@ -256,14 +252,10 @@ app.get('/api/roles', (req, res) => {
  *             type: object
  *             required:
  *               - title
- *               - department
  *             properties:
  *               title:
  *                 type: string
  *                 example: Senior Developer
- *               department:
- *                 type: string
- *                 example: Engineering
  *     responses:
  *       201:
  *         description: Role created successfully
@@ -279,12 +271,12 @@ app.get('/api/roles', (req, res) => {
  *               $ref: '#/components/schemas/Error'
  */
 app.post('/api/roles', (req, res) => {
-  const { title, department } = req.body;
+  const { title } = req.body;
 
   // Validate required fields
-  if (!title || !department) {
+  if (!title) {
     return res.status(400).json({ 
-      error: 'Missing required fields: title and department are required' 
+      error: 'Missing required fields: title is required' 
     });
   }
 
@@ -300,8 +292,7 @@ app.post('/api/roles', (req, res) => {
   // Create new role with auto-incrementing id
   const newRole = {
     id: roles.length > 0 ? Math.max(...roles.map(r => r.id)) + 1 : 1,
-    title,
-    department
+    title
   };
 
   roles.push(newRole);
