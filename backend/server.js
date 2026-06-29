@@ -220,6 +220,48 @@ app.post('/api/users', (req, res) => {
 
 /**
  * @swagger
+ * /api/user/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     description: Retrieve a single user by their ID
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+app.get('/api/user/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+
+  // Find the user
+  const user = users.find(user => user.id === id);
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  res.status(200).json(user);
+});
+
+/**
+ * @swagger
  * /api/roles:
  *   get:
  *     summary: Get all roles

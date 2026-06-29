@@ -22,6 +22,7 @@ When the backend server is running, you can access the interactive Swagger UI at
 
 ### Users
 - **GET /api/users** - Get all users
+- **GET /api/user/{id}** - Get a user by ID
 - **POST /api/users** - Create a new user
 
 ### Roles
