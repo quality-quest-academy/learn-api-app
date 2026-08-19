@@ -80,11 +80,13 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // In-memory data store
 let users = [
-  { id: 1, name: "John Doe", role: "QA Engineer" }
+  { id: 1, name: "Michal Sroczynski", role: "Content Creator" }
 ];
 
 let roles = [
-  { id: 1, title: "QA Engineer" }
+  { id: 1, title: "QA Engineer" },
+  { id: 2, title: "QA Analyst" },
+  { id: 3, title: "Content Creator" }
 ];
 
 // Middleware
